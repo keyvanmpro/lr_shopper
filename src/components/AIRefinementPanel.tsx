@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Sparkles, RotateCcw, Send, AlertCircle, Bot, Zap, Target, TrendingUp } from 'lucide-react';
+import { X, Sparkles, RotateCcw, Send, AlertCircle } from 'lucide-react';
 
 interface ConversationEntry {
   id: string;
@@ -32,7 +32,6 @@ export default function AIRefinementPanel({
   const [refinementQuery, setRefinementQuery] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [conversation, setConversation] = useState<ConversationEntry[]>([]);
-  const [showWelcome, setShowWelcome] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,16 +97,6 @@ export default function AIRefinementPanel({
     }, 500);
     
     setIsProcessing(false);
-  };
-
-  const handleQuickAction = (action: string) => {
-    setShowWelcome(false);
-    setRefinementQuery(action);
-    // Auto-submit the action
-    setTimeout(() => {
-      const form = document.querySelector('#refinement-form') as HTMLFormElement;
-      if (form) form.requestSubmit();
-    }, 100);
   };
 
   const handleActionChip = (action: string) => {
@@ -192,99 +181,7 @@ export default function AIRefinementPanel({
 
           {/* Conversation History */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-            {conversation.length === 0 && showWelcome ? (
-              <div className="space-y-6">
-                {/* Welcome Bot */}
-                <div className="text-center py-6">
-                  <div className="relative inline-block mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center shadow-lg">
-                      <Bot className="h-8 w-8 text-white" />
-                    </div>
-                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    Assistant IA Shopping
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed px-4">
-                    Je vais vous aider à affiner votre recherche pour trouver exactement ce que vous cherchez !
-                  </p>
-                </div>
-
-                {/* Quick Action CTAs */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-semibold text-gray-900 px-2">Actions rapides :</h4>
-                  
-                  <button
-                    onClick={() => handleQuickAction('moins cher, budget serré')}
-                    className="w-full p-4 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-blue-150 transition-all duration-200 group"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <TrendingUp className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <div className="font-semibold text-blue-900">Réduire le budget</div>
-                        <div className="text-xs text-blue-700">Trouvez des options plus abordables</div>
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleQuickAction('couleurs similaires, plus de choix')}
-                    className="w-full p-4 bg-gradient-to-r from-purple-50 to-purple-100 border border-purple-200 rounded-xl hover:from-purple-100 hover:to-purple-150 transition-all duration-200 group"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Sparkles className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <div className="font-semibold text-purple-900">Élargir les couleurs</div>
-                        <div className="text-xs text-purple-700">Voir des couleurs similaires</div>
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleQuickAction('livraison rapide, urgent')}
-                    className="w-full p-4 bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-xl hover:from-green-100 hover:to-green-150 transition-all duration-200 group"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Zap className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <div className="font-semibold text-green-900">Livraison express</div>
-                        <div className="text-xs text-green-700">Produits livrés en 24h</div>
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleQuickAction('tailles disponibles, plus de choix')}
-                    className="w-full p-4 bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl hover:from-orange-100 hover:to-orange-150 transition-all duration-200 group"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Target className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <div className="font-semibold text-orange-900">Assouplir les tailles</div>
-                        <div className="text-xs text-orange-700">Voir les tailles proches</div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-
-                {/* Custom Request */}
-                <div className="pt-4 border-t border-gray-200">
-                  <p className="text-xs text-gray-500 text-center mb-3">
-                    Ou décrivez votre besoin spécifique ci-dessous
-                  </p>
-                </div>
-              </div>
-            ) : conversation.length === 0 ? (
+            {conversation.length === 0 ? (
               <div className="text-center text-gray-500 py-4 sm:py-8">
                 <Sparkles className="h-8 w-8 mx-auto mb-3 text-gray-300" />
                 <p className="text-sm">Décrivez comment affiner votre recherche</p>
@@ -343,34 +240,31 @@ export default function AIRefinementPanel({
 
           {/* Input Section */}
           <div className="border-t border-gray-200 p-4 sm:p-6 space-y-3 sm:space-y-4">
-            {/* Quick Suggestions - Only show after conversation starts */}
-            {conversation.length > 0 && (
-              <div>
-                <h4 className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Suggestions</h4>
-                <div className="flex flex-wrap gap-2">
-                  {suggestions.map((suggestion, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setRefinementQuery(suggestion)}
-                      className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-red-50 hover:text-red-700 transition-colors break-words"
-                      disabled={isProcessing}
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
+            {/* Quick Suggestions */}
+            <div>
+              <h4 className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Suggestions</h4>
+              <div className="flex flex-wrap gap-2">
+                {suggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setRefinementQuery(suggestion)}
+                    className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-red-50 hover:text-red-700 transition-colors break-words"
+                    disabled={isProcessing}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
             {/* Input Form */}
-            <form id="refinement-form" onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="relative">
                 <textarea
                   value={refinementQuery}
                   onChange={(e) => setRefinementQuery(e.target.value)}
-                  onFocus={() => setShowWelcome(false)}
                   placeholder="Décrivez votre ajustement..."
-                  className="w-full p-2 sm:p-3 pr-10 sm:pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none resize-none text-sm transition-all"
+                  className="w-full p-2 sm:p-3 pr-10 sm:pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none resize-none text-sm"
                   rows={2}
                   disabled={isProcessing}
                 />
@@ -380,7 +274,7 @@ export default function AIRefinementPanel({
                   className={`absolute bottom-1 sm:bottom-2 right-1 sm:right-2 p-1 sm:p-1.5 rounded-md transition-colors ${
                     !refinementQuery.trim() || isProcessing
                       ? 'text-gray-400 cursor-not-allowed'
-                      : 'text-red-600 hover:bg-red-50 hover:scale-110'
+                      : 'text-red-600 hover:bg-red-50'
                   }`}
                 >
                   <Send className="h-3 w-3 sm:h-4 sm:w-4" />
